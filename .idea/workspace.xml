@@ -5,22 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fe88d0af-42b6-436c-888e-a90f2f7b78bb" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/autogen.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app_agent.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app_agent.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app_team.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app_team.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app_team_backup.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model_config_template.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/router.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scematic_routing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
