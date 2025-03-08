@@ -5,20 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fe88d0af-42b6-436c-888e-a90f2f7b78bb" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/documents/store_sop.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/embeddings/embedding.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sop_team.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sop_team.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/autogen.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/agent_history.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/agent_state.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/model_config_template.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app_agent.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app_agent.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app_team.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app_team.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app_team_backup.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sop_team.py" beforeDir="false" afterPath="$PROJECT_DIR$/sop_team.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,7 +63,7 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.embedding (1)">
+  <component name="RunManager" selected="Python.sop_team">
     <configuration name="embedding (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="humaninloop" />
       <option name="ENV_FILES" value="" />
@@ -183,11 +176,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.sop_team" />
         <item itemvalue="Python.embedding (1)" />
         <item itemvalue="Python.store_sop (1)" />
         <item itemvalue="Python.embedding" />
         <item itemvalue="Python.store_sop" />
-        <item itemvalue="Python.sop_team" />
       </list>
     </recent_temporary>
   </component>
