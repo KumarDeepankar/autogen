@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical SOP Search</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+        }
+
+        #search-container {
+            width: 100%;
+            max-width: 700px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            margin-top: 50px; /* Ensure there's space at the top */
+        }
+
+        #logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: #4285F4;
+            margin: 30px 0;
+        }
+
+        #search-box {
+            width: 100%;
+            display: flex;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        #search-input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 1px solid #ddd;
+            border-radius: 24px;
+            font-size: 16px;
+            box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);
+            width: 100%; /* Ensure the input has full width */
+        }
+
+        #search-button {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 8px 16px;
+            border: none;
+            background-color: #4285F4;
+            color: #fff;
+            border-radius: 24px;
+            cursor: pointer;
+        }
+
+        #results-container {
+            width: 100%;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);
+            padding: 20px;
+            margin-top: 10px;
+        }
+
+        #results {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .result-item {
+            margin: 15px 0;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .result-title {
+            color: #1a0dab;
+            font-size: 18px;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .result-content {
+            color: #4d5156;
+            line-height: 1.5;
+        }
+
+        .source-label {
+            display: inline-block;
+            background-color: #f1f3f4;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .chat-option {
+            background-color: #f1f3f4;
+            border-radius: 18px;
+            padding: 8px 16px;
+            margin: 10px 5px 10px 0;
+            display: inline-block;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .chat-option:hover {
+            background-color: #e8eaed;
+        }
+
+        #follow-up-container {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        #search-history {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #70757a;
+        }
+
+        .message.error {
+            color: #721c24;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+
+        .message.system {
+            color: #0c5460;
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="search-container">
+        <div id="logo">Medical SOP Search</div>
+        <div id="search-box">
+            <input type="text" id="search-input" placeholder="Search...">
+            <button id="search-button" onclick="performSearch()">Search</button>
+        </div>
+        <div id="search-history" class="hidden"></div>
+        <div id="results-container" class="hidden">
+            <div id="results"></div>
+            <div id="follow-up-container"></div>
+        </div>
+    </div>
+
+    <script>
+        let ws = null;
+        let isFirstSearch = true;
+
+        // Initialize WebSocket connection
+        function initWebSocket() {
+            ws = new WebSocket('ws://localhost:8002/ws/chat');
+
+            ws.onopen = function() {
+                console.log("WebSocket connection established");
+            };
+
+            ws.onmessage = function (event) {
+                const message = JSON.parse(event.data);
+
+                if (message.type === 'UserInputRequestedEvent') {
+                    // Show follow-up suggestions after the first search
+                    if (!isFirstSearch) {
+                        suggestFollowUps();
+                    }
+                    enableSearchInput();
+                }
+                else if (message.type === 'error') {
+                    // Display error message
+                    displayErrorMessage(message.content);
+                    enableSearchInput();
+                }
+                else {
+                    // Display result
+                    displayResult(message.content, message.source);
+                    document.getElementById('results-container').classList.remove('hidden');
+                }
+            };
+
+            ws.onerror = function(error) {
+                displayErrorMessage("WebSocket error occurred. Please refresh the page.");
+                enableSearchInput();
+            };
+
+            ws.onclose = function() {
+                displayErrorMessage("Connection closed. Please refresh the page.");
+                disableSearchInput();
+            };
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize WebSocket when the page loads
+            initWebSocket();
+
+            // Set up event listener for search input
+            document.getElementById('search-input').addEventListener('keydown', function (event) {
+                if (event.key === 'Enter' && !event.target.disabled) {
+                    performSearch();
+                }
+            });
+
+            // Load history
+            loadHistory();
+        });
+
+        async function performSearch() {
+            if (!ws || ws.readyState !== WebSocket.OPEN) {
+                initWebSocket();
+                setTimeout(performSearch, 1000); // Retry after a delay
+                return;
+            }
+
+            const input = document.getElementById('search-input');
+            const query = input.value;
+            if (!query) return;
+
+            // Clear results if it's the first search
+            if (isFirstSearch) {
+                document.getElementById('results').innerHTML = '';
+                isFirstSearch = false;
+            } else {
+                // Add to search history
+                updateSearchHistory(query);
+            }
+
+            // Disable search input during processing
+            disableSearchInput();
+
+            // Send message to WebSocket
+            ws.send(JSON.stringify({ content: query, source: 'user' }));
+        }
+
+        function updateSearchHistory(query) {
+            const historyElement = document.getElementById('search-history');
+            historyElement.classList.remove('hidden');
+            historyElement.textContent = 'Recent search: ' + query;
+        }
+
+        function displayResult(content, source) {
+            const resultsContainer = document.getElementById('results');
+            const resultElement = document.createElement('div');
+            resultElement.className = 'result-item';
+
+            const sourceLabel = document.createElement('div');
+            sourceLabel.className = 'source-label';
+            sourceLabel.textContent = source;
+
+            const contentElement = document.createElement('div');
+            contentElement.className = 'result-content';
+            contentElement.textContent = content;
+
+            resultElement.appendChild(sourceLabel);
+            resultElement.appendChild(contentElement);
+            resultsContainer.appendChild(resultElement);
+            resultsContainer.scrollTop = resultsContainer.scrollHeight;
+        }
+
+        function displayErrorMessage(content) {
+            const resultsContainer = document.getElementById('results');
+            const messageElement = document.createElement('div');
+            messageElement.className = 'message error';
+            messageElement.textContent = content;
+            resultsContainer.appendChild(messageElement);
+            document.getElementById('results-container').classList.remove('hidden');
+        }
+
+        function suggestFollowUps() {
+            const followUpContainer = document.getElementById('follow-up-container');
+            followUpContainer.innerHTML = '';
+
+            // Example follow-up queries - these would ideally be generated based on context
+            const followUps = [
+                "Tell me more about this",
+                "How does this work?",
+                "Show examples",
+                "Compare alternatives"
+            ];
+
+            followUps.forEach(text => {
+                const option = document.createElement('div');
+                option.className = 'chat-option';
+                option.textContent = text;
+                option.onclick = function() {
+                    document.getElementById('search-input').value = text;
+                    performSearch();
+                };
+                followUpContainer.appendChild(option);
+            });
+        }
+
+        function disableSearchInput() {
+            const button = document.getElementById('search-button');
+            button.disabled = true;
+            button.style.backgroundColor = '#a9a9a9';
+        }
+
+        function enableSearchInput() {
+            const button = document.getElementById('search-button');
+            button.disabled = false;
+            button.style.backgroundColor = '#4285F4';
+        }
+
+        async function loadHistory() {
+            try {
+                const response = await fetch('http://localhost:8002/history');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const history = await response.json();
+
+                if (history.length > 0) {
+                    // Display past results
+                    history.forEach(message => {
+                        displayResult(message.content, message.source);
+                    });
+                    document.getElementById('results-container').classList.remove('hidden');
+                    isFirstSearch = false;
+                }
+            } catch (error) {
+                console.error('Error loading history:', error);
+            }
+        }
+    </script>
+</body>
+
+</html>
