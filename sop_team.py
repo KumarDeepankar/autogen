@@ -16,8 +16,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from autogen_ext.models.openai import OpenAIChatCompletionClient
-from documents.store_sop import fetch_document
 from autogen_agentchat.conditions import MaxMessageTermination, TextMentionTermination
+from documents.fetch_sop import fetch_document
+import faiss
+import ollama
+import numpy as np
+import pickle
 
 logger = logging.getLogger(__name__)
 
@@ -47,7 +51,7 @@ async def root():
 
 def search_documents(query: str) -> list:
     # Load the FAISS index from a file
-    index = faiss.read_index("../embeddings/faiss_index_file.idx")
+    index = faiss.read_index("embeddings/faiss_index_file.idx")
     model = 'nomic-embed-text'
     query_response = ollama.embeddings(model=model, prompt=query)
     query_embedd = np.array([query_response['embedding']]).astype('float32')
@@ -91,10 +95,10 @@ async def get_team(
         model_client=model_client,
         system_message="""
         You are a planning agent.
-        Your job is to break down complex tasks into smaller, manageable subtasks.
+        Your job is to break down complex tasks into smaller, manageable subtasks. Don't take multiple turns.
         Your team members are:
             SearchAgent: Searches for information
-            DataAnalystAgent: Performs sop document analysis
+            SummaryAgent: Performs document summary
 
         You only plan and delegate tasks - you do not execute them yourself.
 
@@ -110,9 +114,10 @@ async def get_team(
         description="An agent for searching information from internal storage.",
         tools=[search_documents],
         model_client=model_client,
+        # reflect_on_tool_use=True,
         system_message="""
-        You are a search agent.
-        Your only tool is search_tool - use it to find information.
+        You are a document search agent.
+        Your only tool is search_tool - use it to find document related to user query.
         You make only one search call at a time.
         Once you have the results, you never do calculations based on them.
         """,
@@ -124,12 +129,15 @@ async def get_team(
         model_client=model_client,
         system_message="""
         You are a summary agent. Summarize the finding of the documents.
+        You will be called just once.
         """,
     )
 
-    text_mention_termination = TextMentionTermination("TERMINATE")
-    max_messages_termination = MaxMessageTermination(max_messages=25)
-    termination = text_mention_termination | max_messages_termination
+    # text_mention_termination = TextMentionTermination("TERMINATE")
+    # termination = text_mention_termination | max_messages_termination
+    max_messages_termination = MaxMessageTermination(max_messages=3)
+    termination = max_messages_termination
+
 
     selector_prompt = """Select an agent to perform task.
 
@@ -148,39 +156,8 @@ async def get_team(
         model_client=model_client,
         termination_condition=termination,
         selector_prompt=selector_prompt,
-        allow_repeated_speaker=True,  # Allow an agent to speak multiple turns in a row.
+        allow_repeated_speaker=False,  # Allow an agent to speak multiple turns in a row.
     )
-
-
-
-
-
-    # # Create the team.
-    # agent = AssistantAgent(
-    #     name="assistant",
-    #     model_client=model_client,
-    #     system_message="You are a helpful assistant.",
-    # )
-    # yoda = AssistantAgent(
-    #     name="yoda",
-    #     model_client=model_client,
-    #     system_message="Repeat the same message in the tone of Yoda.",
-    # )
-    # user_proxy = UserProxyAgent(
-    #     name="user",
-    #     input_func=user_input_func,  # Use the user input function.
-    # )
-    # team = RoundRobinGroupChat(
-    #     [agent, yoda, user_proxy],
-    # )
-
-
-    # Load state from file.
-    if not os.path.exists(state_path):
-        return team
-    async with aiofiles.open(state_path, "r") as file:
-        state = json.loads(await file.read())
-    await team.load_state(state)
     return team
 
 
@@ -229,14 +206,6 @@ async def chat(websocket: WebSocket):
                         # Don't save user input events to history.
                         history.append(message.model_dump())
 
-                # Save team state to file.
-                async with aiofiles.open(state_path, "w") as file:
-                    state = await team.save_state()
-                    await file.write(json.dumps(state))
-
-                # Save chat history to file.
-                async with aiofiles.open(history_path, "w") as file:
-                    await file.write(json.dumps(history))
 
             except Exception as e:
                 # Send error message to client

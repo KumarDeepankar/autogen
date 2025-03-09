@@ -5,13 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fe88d0af-42b6-436c-888e-a90f2f7b78bb" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/documents/fetch_sop.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app_agent.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app_agent.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app_team.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app_team.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app_team_backup.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/sop_team.py" beforeDir="false" afterPath="$PROJECT_DIR$/sop_team.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sop_team_history.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sop_team_state.json" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,11 +45,14 @@
     "Python.app_team_backup.executor": "Run",
     "Python.embedding (1).executor": "Run",
     "Python.embedding.executor": "Run",
+    "Python.fetch_sop.executor": "Run",
     "Python.router.executor": "Run",
     "Python.scematic_routing.executor": "Run",
+    "Python.semantic_routing.executor": "Run",
     "Python.sop_team.executor": "Run",
     "Python.store_sop (1).executor": "Run",
     "Python.store_sop.executor": "Run",
+    "Python.test.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
     "last_opened_file_path": "/Users/deepankar/PycharmProjects/autogen/documents"
@@ -64,7 +66,7 @@
     </key>
   </component>
   <component name="RunManager" selected="Python.sop_team">
-    <configuration name="embedding (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="fetch_sop" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="humaninloop" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -73,11 +75,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/embeddings" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/documents" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/embeddings/embedding.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/documents/fetch_sop.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -86,7 +88,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="embedding" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="semantic_routing" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="humaninloop" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -99,7 +101,7 @@
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/embedding.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/semantic_routing.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -152,7 +154,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="store_sop" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="humaninloop" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -165,7 +167,7 @@
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/store_sop.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -177,10 +179,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.sop_team" />
-        <item itemvalue="Python.embedding (1)" />
+        <item itemvalue="Python.semantic_routing" />
+        <item itemvalue="Python.test" />
+        <item itemvalue="Python.fetch_sop" />
         <item itemvalue="Python.store_sop (1)" />
-        <item itemvalue="Python.embedding" />
-        <item itemvalue="Python.store_sop" />
       </list>
     </recent_temporary>
   </component>
